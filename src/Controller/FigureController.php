@@ -25,9 +25,15 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Twig\Environment;
+
 use App\Entity\Image;
 use App\Entity\Figure;
 use App\Entity\Message;
+
+use App\Form\FigureType;
+
+
+
 class FigureController extends Controller
 {
     /**

@@ -116,10 +116,8 @@
     var showNumber = 0;
     var step = 5;
     var figures = document.getElementsByClassName("figure_min");
-    console.log(figures)
     {% if numberFigures is defined %}
         var numberFigures = {{ numberFigures }};
-        console.log(numberFigures);
     {% endif %} 
     
     
@@ -128,11 +126,14 @@
         
         var total = document.body.scrollTop + window.innerHeight;
         
+        
+        
         if(total >= document.body.scrollHeight && showNumber < numberFigures ){
             showNumber += step;
+            var start = (showNumber-step)>=0 ? showNumber-step : 0
             if( showNumber > numberFigures ){ showNumber = figures.length }
             
-            for (var i = showNumber-step; i < showNumber; i++) {
+            for (var i = start ; i < showNumber ; i++) {
                 figures[i].style.display = "block";
             }
             

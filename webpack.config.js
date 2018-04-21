@@ -7,9 +7,17 @@ Encore
     // the public path used by the web server to access the previous directory
     .setPublicPath('/build')
 
+    
+    
     // will create public/build/app.js and public/build/app.css
     .addEntry('app', './assets/js/app.js')
+    .addEntry('greet', './assets/js/greet.js')
+    .addEntry('lazyloading', './assets/js/lazyloading.js')
+    
+    
 
+    
+    
     // allow legacy applications to use $/jQuery as a global variable
     .autoProvidejQuery()
 
@@ -21,6 +29,9 @@ Encore
 
     // show OS notifications when builds finish/fail
     .enableBuildNotifications()
+    
+    
+    .enableReactPreset()
 
     // create hashed filenames (e.g. app.abc123.css)
     // .enableVersioning()
