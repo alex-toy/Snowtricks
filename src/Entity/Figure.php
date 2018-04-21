@@ -26,25 +26,31 @@ class Figure
      */
     private $description;
     
-    /**
-     * @ORM\Column(type="string", length=500, nullable=true)
-     */
-    private $image;
+    
     
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="figure")
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload the product brochure as a PDF file.")
+     * @Assert\File(mimeTypes={ "application/pdf" })
      */
-    private $secondaryImages;
+    private $brochure;
+
+    public function getBrochure()
+    {
+        return $this->brochure;
+    }
+
+    public function setBrochure($brochure)
+    {
+        $this->brochure = $brochure;
+
+        return $this;
+    }
     
-    /**
-     * @Assert\Image(
-     *     minWidth = 100,
-     *     maxWidth = 400,
-     *     minHeight = 100,
-     *     maxHeight = 400
-     * )
-     */
-    private $attachment;
+    
+    
+    
     /**
      * @ORM\Column(type="decimal", scale=2)
      */
@@ -60,13 +66,7 @@ class Figure
         $this->secondaryImages = new ArrayCollection();
     }
     
-    /**
-     * @return Collection|Image[]
-     */
-    public function getSecondaryImages()
-    {
-        return $this->secondaryImages;
-    }
+    
     
     
     /**
@@ -109,14 +109,6 @@ class Figure
         $this->difficulty = $difficulty;
     }
     
-    public function getImage()
-    {
-        return $this->image;
-    }
-    public function setImage($image = 'http://localhost/~alexei/Documents/OPENCLASSROOM/Projet6/Snowtricks/public/images/S1.jpg')
-    {
-        $this->image = $image;
-    }
     
     
     
@@ -124,14 +116,25 @@ class Figure
     
     
     
-    public function getAttachment()
-    {
-        return $this->attachment;
-    }
-    public function setAttachment($attachment)
-    {
-        $this->attachment = $attachment;
-    }
+    
     
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

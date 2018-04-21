@@ -2,12 +2,24 @@
 
 namespace App\Form;
 
-use App\Entity\Product;
+use App\Entity\Figure;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
+
+
+
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+
+
+
 
 class FigureType extends AbstractType
 {
@@ -30,8 +42,7 @@ class FigureType extends AbstractType
         		'10' => 10,
     		),
 			))
-			->add('brochure', FileType::class, array('label' => 'Brochure (PDF file)'))
-			->add('attachment', FileType::class)
+			->add('brochure', FileType::class)
 			->add('save', SubmitType::class, array('label' => 'Create figure'));
     }
 
@@ -47,3 +58,16 @@ class FigureType extends AbstractType
 
 
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
