@@ -36,7 +36,7 @@ class Snowboarder
     
     
     /**
-     * @ORM\Column(type="integer", length=100)
+     * @ORM\Column(type="float", length=100)
      */
     private $token;
     
@@ -95,7 +95,7 @@ class Snowboarder
     }
     public function setToken()
     {
-        $this->token = time();
+        $this->token = time() . $this->getId();
     }
     
     
