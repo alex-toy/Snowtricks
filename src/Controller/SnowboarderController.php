@@ -185,13 +185,13 @@ class SnowboarderController extends Controller
         	if(isset( $SnowboarderDB )){
         	
         		$subject = 'oubli de mot de passe';
-        		$message = ucfirst($SnowboarderDB->getName()) . ', voici votre mot de passe : ' . $SnowboarderDB->getPassword();
+        		$message = ucfirst($SnowboarderDB->getName()) . ', suivez ce lien pour regénérer votre mot de passe : http://127.0.0.1:8000/regeneratePassword/' . $SnowboarderDB->getToken();
      			$headers = 'From: webmaster@example.com' . "\r\n" .
      				'Reply-To: webmaster@example.com' . "\r\n" .
     		 		'X-Mailer: PHP/' . phpversion();
         		mail($Snowboarder->getEmail(), $subject, $message, $headers);
         	
-        		$this->addFlash('messages', ucfirst($SnowboarderDB->getName()) . ', merci de regarder dans vos mail afin de retrouver votre mot de passe.' );
+        		$this->addFlash('messages', ucfirst($SnowboarderDB->getName()) . ', merci de regarder dans vos mail afin de regénérer votre mot de passe.' );
         		return $this->redirectToRoute('index');
         	
     		}
@@ -199,6 +199,54 @@ class SnowboarderController extends Controller
 		
 		return $this->render('accueil/forgotPassword.html.twig', array(
         	'formSnowboarder' => $formSnowboarder->createView(),
+    	));
+		
+
+		
+	}
+	
+	
+	
+	/**
+ 	* @Route("/regeneratePassword/{token}", name="regeneratePassword")
+ 	*/
+	public function regeneratePasswordAction(Request $request, $token)
+	{
+		
+		$entityManager = $this->getDoctrine()->getManager();
+    	$repository = $this->getDoctrine()->getRepository(Snowboarder::class);
+		$SnowboarderToUpdate = $repository->findOneBy(
+    		array('token' => $token)
+    	);
+		
+		
+    	if (!$SnowboarderToUpdate) {
+       	 	throw $this->createNotFoundException(
+            	'No Snowboarder found for token '.$token
+        	);
+    	}
+    	
+    	
+		$SnowboarderForm = new Snowboarder();
+    	$formSnowboarder = $this->createFormBuilder($SnowboarderForm)
+        ->add('password',     TextType::class)
+        ->add('Réinitialiser le mot de passe',      SubmitType::class)
+        ->getForm();
+		
+		$formSnowboarder->handleRequest($request);
+		if ($formSnowboarder->isSubmitted() ) {
+        	$password = $formSnowboarder->getData()->getPassword();
+        	$SnowboarderToUpdate->setPassword($password);
+        	$entityManager->flush();
+        	
+        	$this->addFlash('messages', ucfirst($SnowboarderToUpdate->getName()) . ', votre mot de passe vient d\'être regénéré.' );
+        	return $this->redirectToRoute('index');
+        	
+		}
+		
+		return $this->render('accueil/regeneratePassword.html.twig', array(
+        	'formSnowboarder' => $formSnowboarder->createView(),
+        	'name' => $SnowboarderToUpdate->getName()
     	));
 		
 

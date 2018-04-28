@@ -52,6 +52,30 @@ class Figure
     
     
     /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload the product brochure as a PDF file.")
+     * @Assert\File(mimeTypes={ "image/jpeg" })
+     */
+    private $image;
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+    
+    
+    
+    
+    
+    /**
      * @ORM\Column(type="decimal", scale=2)
      */
     private $difficulty;

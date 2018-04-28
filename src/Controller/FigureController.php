@@ -134,6 +134,17 @@ class FigureController extends Controller
             );
         	$figure->setBrochure($fileName);
         	
+        	
+        	
+        	
+        	$file2 = $figure->getImage();
+        	$fileName = $this->generateUniqueFileName().'.'.$file2->guessExtension();
+        	$file2->move(
+                $this->getParameter('images_directory'),
+                $fileName
+            );
+        	$figure->setImage($fileName);
+        	
 
         	
         	

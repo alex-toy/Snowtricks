@@ -43,6 +43,7 @@ class FigureType extends AbstractType
     		),
 			))
 			->add('brochure', FileType::class)
+			->add('image', FileType::class)
 			->add('save', SubmitType::class, array('label' => 'Create figure'));
     }
 
