@@ -93,19 +93,20 @@ class FigureController extends Controller
 		$message = new Message();
 		$form = $this->createFormBuilder($message)
 		->add('contenu',     TextType::class)
-		->add('author',     TextType::class)
 		->add('save',      SubmitType::class)
 		->getForm();
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$message = $form->getData();
 			$message->setFigure($figure);
+			$session = $request->getSession();
+			$message->setAuthor($session->get('name'));
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($message);
 			$em->flush();
 			
 			//$this->addFlash('creation_figure', 'Vous venez de créer une figure!!' );
-			return $this->redirectToRoute('figures');
+			return $this->redirectToRoute('figure_show', array('id' => $id ));
 		}
 		return $this->render('accueil/showfigure.html.twig', ['figure' => $figure, 'messages' => $messages, 'form' => $form->createView()]);
 	}
@@ -126,23 +127,9 @@ class FigureController extends Controller
         	$figure = $form->getData();
         	
         	
-        	$file = $figure->getBrochure();
+        	$file = $figure->getImage();
         	$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-        	$file->move(
-                $this->getParameter('brochures_directory'),
-                $fileName
-            );
-        	$figure->setBrochure($fileName);
-        	
-        	
-        	
-        	
-        	$file2 = $figure->getImage();
-        	$fileName = $this->generateUniqueFileName().'.'.$file2->guessExtension();
-        	$file2->move(
-                $this->getParameter('images_directory'),
-                $fileName
-            );
+        	$file->move( $this->getParameter('images_directory'), $fileName  );
         	$figure->setImage($fileName);
         	
 

@@ -51,10 +51,10 @@ class SnowboarderController extends Controller
         	$em->persist($Snowboarder);
         	$em->flush();
         	
-        	$subject = 'le sujet';
+        	$subject = 'Validation de compte';
         	$message = ucfirst($Snowboarder->getName()) . ', suivez ce lien pour valider votre compte : http://127.0.0.1:8000/validateAccount/' . $Snowboarder->getToken();
-     		$headers = 'From: webmaster@example.com' . "\r\n" .
-     		'Reply-To: webmaster@example.com' . "\r\n" .
+     		$headers = 'From: webmaster@snowtricks.com' . "\r\n" .
+     		'Reply-To: webmaster@snowtricks.com' . "\r\n" .
     		 'X-Mailer: PHP/' . phpversion();
         	mail($Snowboarder->getEmail(), $subject, $message, $headers);
         	
@@ -187,8 +187,8 @@ class SnowboarderController extends Controller
         	
         		$subject = 'oubli de mot de passe';
         		$message = ucfirst($SnowboarderDB->getName()) . ', suivez ce lien pour regénérer votre mot de passe : http://127.0.0.1:8000/regeneratePassword/' . $SnowboarderDB->getToken();
-     			$headers = 'From: webmaster@example.com' . "\r\n" .
-     				'Reply-To: webmaster@example.com' . "\r\n" .
+     			$headers = 'From: webmaster@snowtricks.com' . "\r\n" .
+     				'Reply-To: webmaster@snowtricks.com' . "\r\n" .
     		 		'X-Mailer: PHP/' . phpversion();
         		mail($Snowboarder->getEmail(), $subject, $message, $headers);
         	
@@ -222,15 +222,21 @@ class SnowboarderController extends Controller
 		
 		
     	if (!$SnowboarderToUpdate) {
-       	 	throw $this->createNotFoundException(
-            	'No Snowboarder found for token '.$token
-        	);
+       	 	$this->addFlash('messages', 'Désolé, ce lien n\'est plus valide.' );
+        	return $this->redirectToRoute('index');
     	}
     	
     	
 		$SnowboarderForm = new Snowboarder();
     	$formSnowboarder = $this->createFormBuilder($SnowboarderForm)
-        ->add('password',     TextType::class)
+        ->add('password', RepeatedType::class, array(
+    		'type' => PasswordType::class,
+    		'invalid_message' => 'The password fields must match.',
+    		'options' => array('attr' => array('class' => 'password-field')),
+    		'required' => true,
+    		'first_options'  => array('label' => 'Password'),
+    		'second_options' => array('label' => 'Repeat Password'),
+		))
         ->add('Réinitialiser le mot de passe',      SubmitType::class)
         ->getForm();
 		
